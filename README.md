@@ -4,7 +4,7 @@ To be able to test SM code without being scared about the side effects,
 a fakechroot environment is created. This environment is called `smroot`.
 
 To transfer the SM source code to the `smroot` the source code is packaged as
-a `.tgz` file and extracted inside the `smroot`.
+a `.tgz` to a so-called `sm_pack` and extracted inside the `smroot`.
 
  - An `smroot` could be created.
  - An `smroot` could be dumped to a `.tgz` file.
