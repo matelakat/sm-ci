@@ -146,19 +146,26 @@ function smroot_prepare_venv() {
 
 
 function smroot_run_tests() {
+    local sm_tarball
     local chroot_dir
-    chroot_dir="$1"
+    sm_tarball="$1"
+    chroot_dir="$2"
 
     local fakechroot_state
     local chroot_path
     fakechroot_state="$chroot_dir/$FAKECHROOT_FNAME"
     chroot_path="$chroot_dir/$CHROOT_SUBDIR"
 
+    [ -e "$sm_tarball" ]
     [ -e "$fakechroot_state" ]
     [ -d "$chroot_path" ]
+
+    cp "$sm_tarball" "$chroot_path/sm.tgz"
 
     fakeroot -i "$fakechroot_state" -s "$fakechroot_state" fakechroot chroot \
         "$chroot_path" bash -c \
             "cd /storage-manager/sm \
+            && rm -rf drivers tests \
+            && tar -xzf /sm.tgz \
             && bash tests/run_python_unittests.sh"
 }

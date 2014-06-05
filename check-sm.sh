@@ -28,8 +28,7 @@ sm_pack_create "$PATH_TO_SM" "$WORKDIR/sm.tgz"
         smroot_dump "$WORKDIR/smroot" "$WORKDIR/smroot.tgz"
     fi
     smroot_install_prereqs "$WORKDIR/sm.tgz" "$WORKDIR/smroot"
+    smroot_prepare_venv "$WORKDIR/sm.tgz" "$WORKDIR/smroot"
 }
 
-
-smroot_prepare_venv "$WORKDIR/sm.tgz" "$WORKDIR/smroot"
-smroot_run_tests "$WORKDIR/smroot"
+smroot_run_tests "$WORKDIR/sm.tgz" "$WORKDIR/smroot"
