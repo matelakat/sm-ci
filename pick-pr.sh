@@ -55,7 +55,7 @@ cat $tmp_file | while read commit_id; do
     cat >> $cmdfile << EOF
 git cherry-pick $commit_id
 VISUAL=$THISDIR/add_reviewed_by.py git commit --amend
-git commit --amend
+git commit --amend -v
 EOF
 done
 
