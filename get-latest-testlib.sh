@@ -32,12 +32,10 @@ BRANCH="$2"
 tmp_file=$(mktemp)
 
 git fetch "$REMOTE_REPOSITORY" "$BRANCH"
-git log --format=%H HEAD..FETCH_HEAD -- tests/test_testlib.py tests/testlib.py > $tmp_file
+git log --format=%H HEAD..FETCH_HEAD -- tests/lvmlib.py tests/test_lvmlib.py tests/test_testlib.py tests/testlib.py > $tmp_file
 
 cat $tmp_file | while read commit_id; do
-    if git show $commit_id | git apply --check > /dev/null 2>&1; then
+    if ! git log | grep -q "cherry picked from commit $commit_id"; then
         git cherry-pick -x $commit_id
-    else
-        echo "COMMIT $commit_id was not applied - you might have already picked that"
     fi
 done
