@@ -9,6 +9,8 @@ function smroot_create() {
     local chroot_dir
     chroot_dir="$1"
 
+    chroot_dir="$(readlink -f $chroot_dir)"
+
     local fakechroot_state
     local chroot_path
 
@@ -38,8 +40,11 @@ function smroot_dump() {
     local chroot_tarball
     chroot_tarball="$2"
 
+    chroot_dir="$(readlink -f $chroot_dir)"
+
     local fakechroot_state
     local chroot_path
+
     fakechroot_state="$chroot_dir/$FAKECHROOT_FNAME"
     chroot_path="$chroot_dir/$CHROOT_SUBDIR"
 
@@ -60,8 +65,11 @@ function smroot_restore() {
     local chroot_dir
     chroot_dir="$2"
 
+    chroot_dir="$(readlink -f $chroot_dir)"
+
     local fakechroot_state
     local chroot_path
+
     fakechroot_state="$chroot_dir/$FAKECHROOT_FNAME"
     chroot_path="$chroot_dir/$CHROOT_SUBDIR"
 
@@ -74,6 +82,34 @@ function smroot_restore() {
         "mkdir $chroot_path \
         && cd $chroot_path \
         && tar -xzf -" < "$chroot_tarball"
+}
+
+
+function smroot_run() {
+    local chroot_dir
+    chroot_dir="$1"
+
+    local script_to_run
+    script_to_run="$2"
+
+    chroot_dir="$(readlink -f $chroot_dir)"
+    script_to_run="$(readlink -f $script_to_run)"
+
+    local fakechroot_state
+    local chroot_path
+
+    fakechroot_state="$chroot_dir/$FAKECHROOT_FNAME"
+    chroot_path="$chroot_dir/$CHROOT_SUBDIR"
+
+    [ -e "$script_to_run" ]
+    [ -e "$fakechroot_state" ]
+    [ -d "$chroot_path" ]
+
+    rm "$chroot_path/the_script.sh"
+    cp "$script_to_run" "$chroot_path/the_script.sh"
+
+    fakeroot -i "$fakechroot_state" -s "$fakechroot_state" fakechroot chroot \
+        "$chroot_path" bash /the_script.sh
 }
 
 
@@ -97,8 +133,11 @@ function smroot_install_prereqs() {
     sm_tarball="$1"
     chroot_dir="$2"
 
+    chroot_dir="$(readlink -f $chroot_dir)"
+
     local fakechroot_state
     local chroot_path
+
     fakechroot_state="$chroot_dir/$FAKECHROOT_FNAME"
     chroot_path="$chroot_dir/$CHROOT_SUBDIR"
 
@@ -123,6 +162,8 @@ function smroot_prepare_venv() {
     local chroot_dir
     sm_tarball="$1"
     chroot_dir="$2"
+
+    chroot_dir="$(readlink -f $chroot_dir)"
 
     local fakechroot_state
     local chroot_path
@@ -150,6 +191,8 @@ function smroot_run_tests() {
     local chroot_dir
     sm_tarball="$1"
     chroot_dir="$2"
+
+    chroot_dir="$(readlink -f $chroot_dir)"
 
     local fakechroot_state
     local chroot_path
