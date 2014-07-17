@@ -30,13 +30,13 @@ EOF
 
 
 function assert_installed() {
-    if which $0; then
+    if which $1; then
         return
     fi
     cat >&2 << EOF
 Error:
 
-$0 was not found, please install it to your system.
+$1 was not found, please install it to your system.
 EOF
     exit 1
 }
