@@ -145,7 +145,7 @@ function chroot_run() {
     [ -e "$fakechroot_state" ]
     [ -d "$chroot_path" ]
 
-    rm "$chroot_path/the_script.sh"
+    rm -f "$chroot_path/the_script.sh"
     cp "$script_to_run" "$chroot_path/the_script.sh"
 
     fakeroot -i "$fakechroot_state" -s "$fakechroot_state" fakechroot chroot \

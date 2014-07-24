@@ -22,3 +22,4 @@ There is no public interface for the library. The public interface consists
 of the scripts:
 
     check-sm.sh
+    check-vhd.sh
