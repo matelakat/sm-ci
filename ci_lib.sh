@@ -22,8 +22,8 @@ function check() {
     [ -d "$workdir" ]
     [ -d "$sources" ]
 
-    rm -f "$workdir/sm.tgz"
-    source_pack_create "$sources" "$workdir/sm.tgz"
+    rm -f "$workdir/source.tgz"
+    source_pack_create "$sources" "$workdir/source.tgz"
 
     [ -d "$workdir/smroot" ] || {
         mkdir "$workdir/smroot"
@@ -35,12 +35,12 @@ function check() {
         fi
 
         for prepare_function in $prepare_functions; do
-            $prepare_function "$workdir/sm.tgz" "$workdir/smroot"
+            $prepare_function "$workdir/source.tgz" "$workdir/smroot"
         done
     }
 
     for test_function in $test_functions; do
-       $test_function "$workdir/sm.tgz" "$workdir/smroot"
+       $test_function "$workdir/source.tgz" "$workdir/smroot"
     done
 }
 
@@ -185,14 +185,14 @@ function chroot_install_sm_prereqs() {
     [ -e "$fakechroot_state" ]
     [ -d "$chroot_path" ]
 
-    cp "$sm_tarball" "$chroot_path/sm.tgz"
+    cp "$sm_tarball" "$chroot_path/source.tgz"
 
     fakeroot -i "$fakechroot_state" -s "$fakechroot_state" fakechroot chroot \
         "$chroot_path" bash -c \
             "rm -rf /storage-manager \
             && mkdir -p /storage-manager/sm \
             && cd /storage-manager/sm \
-            && tar -xzf /sm.tgz \
+            && tar -xzf /source.tgz \
             && bash tests/install_prerequisites_for_python_unittests.sh"
 }
 
@@ -214,14 +214,14 @@ function chroot_prepare_sm_venv() {
     [ -e "$fakechroot_state" ]
     [ -d "$chroot_path" ]
 
-    cp "$sm_tarball" "$chroot_path/sm.tgz"
+    cp "$sm_tarball" "$chroot_path/source.tgz"
 
     fakeroot -i "$fakechroot_state" -s "$fakechroot_state" fakechroot chroot \
         "$chroot_path" bash -c \
             "rm -rf /storage-manager \
             && mkdir -p /storage-manager/sm \
             && cd /storage-manager/sm \
-            && tar -xzf /sm.tgz \
+            && tar -xzf /source.tgz \
             && bash tests/setup_env_for_python_unittests.sh"
 }
 
@@ -243,12 +243,12 @@ function chroot_run_sm_tests() {
     [ -e "$fakechroot_state" ]
     [ -d "$chroot_path" ]
 
-    cp "$sm_tarball" "$chroot_path/sm.tgz"
+    cp "$sm_tarball" "$chroot_path/source.tgz"
 
     fakeroot -i "$fakechroot_state" -s "$fakechroot_state" fakechroot chroot \
         "$chroot_path" bash -c \
             "cd /storage-manager/sm \
             && rm -rf drivers tests \
-            && tar -xzf /sm.tgz \
+            && tar -xzf /source.tgz \
             && bash tests/run_python_unittests.sh"
 }
