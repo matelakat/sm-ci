@@ -16,9 +16,9 @@ a `.tgz` to a so-called `source_pack` and extracted inside the `chroot`.
  - Unit tests could be ran in an `chroot` that has all the prerequisites
    installed and the python test environment created.
 
-## Library functions `ci_lib.sh`
+## Public interface
 
-Exercise the library with:
+There is no public interface for the library. The public interface consists
+of the scripts:
 
-    test_ci_lib.sh
-
+    check-sm.sh
