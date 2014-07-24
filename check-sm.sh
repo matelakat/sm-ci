@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eux
+set -e
 
 function usage() {
     cat >&2 << EOF
@@ -43,6 +43,8 @@ EOF
 
 [ -z "$1" ] && usage
 [ -z "$2" ] && usage
+
+set -eux
 
 PATH_TO_SM="$1"
 WORKDIR="$2"
