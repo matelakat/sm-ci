@@ -7,7 +7,7 @@ set -eux
 workdir=$(mktemp -d)
 mkdir "$workdir/smroot"
 
-smroot_create "$workdir/smroot"
+chroot_create "$workdir/smroot"
 smroot_dump "$workdir/smroot" "$workdir/smroot.tgz"
 rm -rf "$workdir/smroot"
 mkdir "$workdir/smroot"

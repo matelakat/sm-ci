@@ -5,7 +5,7 @@ CHROOT_SUBDIR="${UBUNTU_SUITE}-chroot"
 FAKECHROOT_FNAME="fakechroot.save"
 
 
-function smroot_create() {
+function chroot_create() {
     local chroot_dir
     chroot_dir="$1"
 
