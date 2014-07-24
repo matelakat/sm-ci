@@ -69,7 +69,7 @@ source_pack_create "$PATH_TO_SM" "$WORKDIR/sm.tgz"
 [ -d "$WORKDIR/smroot" ] || {
     mkdir "$WORKDIR/smroot"
     if [ -e "$WORKDIR/smroot.tgz" ]; then
-        smroot_restore "$WORKDIR/smroot.tgz" "$WORKDIR/smroot"
+        chroot_restore "$WORKDIR/smroot.tgz" "$WORKDIR/smroot"
     else
         smroot_create "$WORKDIR/smroot"
         smroot_dump "$WORKDIR/smroot" "$WORKDIR/smroot.tgz"

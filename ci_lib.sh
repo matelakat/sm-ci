@@ -58,7 +58,7 @@ function smroot_dump() {
 }
 
 
-function smroot_restore() {
+function chroot_restore() {
     local chroot_tarball
     chroot_tarball="$1"
 
