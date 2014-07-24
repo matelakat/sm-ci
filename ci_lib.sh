@@ -113,17 +113,17 @@ function smroot_run() {
 }
 
 
-function sm_pack_create() {
-    local sm_path
-    sm_path="$1"
+function source_pack_create() {
+    local source_path
+    source_path="$1"
 
-    local sm_tarball
-    sm_tarball="$2"
+    local source_tarball
+    source_tarball="$2"
 
-    [ -d "$sm_path" ]
-    [ ! -e "$sm_tarball" ]
+    [ -d "$source_path" ]
+    [ ! -e "$source_tarball" ]
 
-    tar -czf "$sm_tarball" -C "$sm_path" ./
+    tar -czf "$source_tarball" -C "$source_path" ./
 }
 
 

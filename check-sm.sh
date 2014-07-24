@@ -64,7 +64,7 @@ WORKDIR=$(readlink -f $WORKDIR)
 [ -d "$WORKDIR" ]
 
 rm -f "$WORKDIR/sm.tgz"
-sm_pack_create "$PATH_TO_SM" "$WORKDIR/sm.tgz"
+source_pack_create "$PATH_TO_SM" "$WORKDIR/sm.tgz"
 
 [ -d "$WORKDIR/smroot" ] || {
     mkdir "$WORKDIR/smroot"
