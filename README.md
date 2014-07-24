@@ -1,19 +1,19 @@
-# Scripts for testing Storage Manager (SM)
+# Scripts for testing
 
-To be able to test SM code without being scared about the side effects,
-a fakechroot environment is created. This environment is called `smroot`.
+To be able to test code without being scared about the side effects,
+a fakechroot environment is created. This environment is called `chroot`.
 
-To transfer the SM source code to the `smroot` the source code is packaged as
-a `.tgz` to a so-called `sm_pack` and extracted inside the `smroot`.
+To transfer the source code to the `chroot` the source code is packaged as
+a `.tgz` to a so-called `source_pack` and extracted inside the `chroot`.
 
- - An `smroot` could be created.
- - An `smroot` could be dumped to a `.tgz` file.
- - An `smroot` could be restored from a `.tgz` file.
- - A tarball file, `sm_pack` could be created from a Storage Manager Repository.
- - An `sm_pack` could be used to install the prerequisites to an `smroot`.
- - An `sm_pack` could be used to create the python test environment within
-   `smroot`.
- - Unit tests could be ran in an `smroot` that has all the prerequisites
+ - A `chroot` could be created.
+ - A `chroot` could be dumped to a `.tgz` file.
+ - A `chroot` could be restored from a `.tgz` file.
+ - A tarball file, `source_pack` could be created from the sources.
+ - A `source_pack` could be used to install the prerequisites to an `chroot`.
+ - A `source_pack` could be used to create the python test environment within
+   `chroot`.
+ - Unit tests could be ran in an `chroot` that has all the prerequisites
    installed and the python test environment created.
 
 ## Library functions `ci_lib.sh`
