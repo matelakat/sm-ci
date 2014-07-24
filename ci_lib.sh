@@ -186,7 +186,7 @@ function chroot_prepare_sm_venv() {
 }
 
 
-function smroot_run_tests() {
+function chroot_run_sm_tests() {
     local sm_tarball
     local chroot_dir
     sm_tarball="$1"

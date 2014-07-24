@@ -78,4 +78,4 @@ source_pack_create "$PATH_TO_SM" "$WORKDIR/sm.tgz"
     chroot_prepare_sm_venv "$WORKDIR/sm.tgz" "$WORKDIR/smroot"
 }
 
-smroot_run_tests "$WORKDIR/sm.tgz" "$WORKDIR/smroot"
+chroot_run_sm_tests "$WORKDIR/sm.tgz" "$WORKDIR/smroot"
