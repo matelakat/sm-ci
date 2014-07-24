@@ -16,9 +16,9 @@ a `.tgz` to a so-called `sm_pack` and extracted inside the `smroot`.
  - Unit tests could be ran in an `smroot` that has all the prerequisites
    installed and the python test environment created.
 
-## Library functions `sm_ci_lib.sh`
+## Library functions `ci_lib.sh`
 
 Exercise the library with:
 
-    test_sm_ci_lib.sh
+    test_ci_lib.sh
 

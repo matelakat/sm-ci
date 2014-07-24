@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eux
 
-. sm_ci_lib.sh
+. ci_lib.sh
 
 
 workdir=$(mktemp -d)

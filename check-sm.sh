@@ -59,7 +59,7 @@ PATH_TO_SM=$(readlink -f $PATH_TO_SM)
 WORKDIR=$(readlink -f $WORKDIR)
 
 
-. "$THISDIR/sm_ci_lib.sh"
+. "$THISDIR/ci_lib.sh"
 
 [ -d "$WORKDIR" ]
 
