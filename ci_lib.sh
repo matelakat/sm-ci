@@ -9,10 +9,12 @@ function check() {
     local sources
     local workdir
     local prepare_functions
+    local test_functions
 
     sources="$1"
     workdir="$2"
     prepare_functions="$3"
+    test_functions="$4"
 
     sources=$(readlink -f $sources)
     workdir=$(readlink -f $workdir)
@@ -36,7 +38,10 @@ function check() {
             $prepare_function "$workdir/sm.tgz" "$workdir/smroot"
         done
     }
-    chroot_run_sm_tests "$workdir/sm.tgz" "$workdir/smroot"
+
+    for test_function in $test_functions; do
+       $test_function "$workdir/sm.tgz" "$workdir/smroot"
+    done
 }
 
 

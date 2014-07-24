@@ -58,4 +58,5 @@ THISDIR=$(dirname $THISFILE)
 . "$THISDIR/ci_lib.sh"
 
 check "$PATH_TO_SM" "$WORKDIR" \
-    "chroot_install_sm_prereqs chroot_prepare_sm_venv"
+    "chroot_install_sm_prereqs chroot_prepare_sm_venv" \
+    "chroot_run_sm_tests"
