@@ -27,11 +27,11 @@ function check() {
 
     [ -d "$workdir/chroot" ] || {
         mkdir "$workdir/chroot"
-        if [ -e "$workdir/smroot.tgz" ]; then
-            chroot_restore "$workdir/smroot.tgz" "$workdir/chroot"
+        if [ -e "$workdir/chroot.tgz" ]; then
+            chroot_restore "$workdir/chroot.tgz" "$workdir/chroot"
         else
             chroot_create "$workdir/chroot"
-            chroot_dump "$workdir/chroot" "$workdir/smroot.tgz"
+            chroot_dump "$workdir/chroot" "$workdir/chroot.tgz"
         fi
 
         for prepare_function in $prepare_functions; do
