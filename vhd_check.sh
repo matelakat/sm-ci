@@ -1,3 +1,4 @@
+set -eux
 rm -rf /blktap
 mkdir /blktap
 cd blktap
