@@ -8,9 +8,11 @@ FAKECHROOT_FNAME="fakechroot.save"
 function check() {
     local sources
     local workdir
+    local prepare_functions
 
     sources="$1"
     workdir="$2"
+    prepare_functions="$3"
 
     sources=$(readlink -f $sources)
     workdir=$(readlink -f $workdir)
@@ -29,8 +31,10 @@ function check() {
             chroot_create "$workdir/smroot"
             chroot_dump "$workdir/smroot" "$workdir/smroot.tgz"
         fi
-        chroot_install_sm_prereqs "$workdir/sm.tgz" "$workdir/smroot"
-        chroot_prepare_sm_venv "$workdir/sm.tgz" "$workdir/smroot"
+
+        for prepare_function in $prepare_functions; do
+            $prepare_function "$workdir/sm.tgz" "$workdir/smroot"
+        done
     }
     chroot_run_sm_tests "$workdir/sm.tgz" "$workdir/smroot"
 }
