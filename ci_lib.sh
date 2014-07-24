@@ -157,7 +157,7 @@ function chroot_install_sm_prereqs() {
 }
 
 
-function smroot_prepare_venv() {
+function chroot_prepare_sm_venv() {
     local sm_tarball
     local chroot_dir
     sm_tarball="$1"

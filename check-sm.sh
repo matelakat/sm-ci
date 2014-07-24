@@ -75,7 +75,7 @@ source_pack_create "$PATH_TO_SM" "$WORKDIR/sm.tgz"
         chroot_dump "$WORKDIR/smroot" "$WORKDIR/smroot.tgz"
     fi
     chroot_install_sm_prereqs "$WORKDIR/sm.tgz" "$WORKDIR/smroot"
-    smroot_prepare_venv "$WORKDIR/sm.tgz" "$WORKDIR/smroot"
+    chroot_prepare_sm_venv "$WORKDIR/sm.tgz" "$WORKDIR/smroot"
 }
 
 smroot_run_tests "$WORKDIR/sm.tgz" "$WORKDIR/smroot"
