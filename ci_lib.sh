@@ -33,7 +33,7 @@ function chroot_create() {
 }
 
 
-function smroot_dump() {
+function chroot_dump() {
     local chroot_dir
     chroot_dir="$1"
 
