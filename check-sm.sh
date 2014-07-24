@@ -55,27 +55,6 @@ assert_installed debootstrap
 THISFILE=$(readlink -f $0)
 THISDIR=$(dirname $THISFILE)
 
-PATH_TO_SM=$(readlink -f $PATH_TO_SM)
-WORKDIR=$(readlink -f $WORKDIR)
-
-
 . "$THISDIR/ci_lib.sh"
 
-[ -d "$WORKDIR" ]
-
-rm -f "$WORKDIR/sm.tgz"
-source_pack_create "$PATH_TO_SM" "$WORKDIR/sm.tgz"
-
-[ -d "$WORKDIR/smroot" ] || {
-    mkdir "$WORKDIR/smroot"
-    if [ -e "$WORKDIR/smroot.tgz" ]; then
-        chroot_restore "$WORKDIR/smroot.tgz" "$WORKDIR/smroot"
-    else
-        chroot_create "$WORKDIR/smroot"
-        chroot_dump "$WORKDIR/smroot" "$WORKDIR/smroot.tgz"
-    fi
-    chroot_install_sm_prereqs "$WORKDIR/sm.tgz" "$WORKDIR/smroot"
-    chroot_prepare_sm_venv "$WORKDIR/sm.tgz" "$WORKDIR/smroot"
-}
-
-chroot_run_sm_tests "$WORKDIR/sm.tgz" "$WORKDIR/smroot"
+check "$PATH_TO_SM" "$WORKDIR"

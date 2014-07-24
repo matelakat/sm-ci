@@ -5,6 +5,37 @@ CHROOT_SUBDIR="${UBUNTU_SUITE}-chroot"
 FAKECHROOT_FNAME="fakechroot.save"
 
 
+function check() {
+    local sources
+    local workdir
+
+    sources="$1"
+    workdir="$2"
+
+    sources=$(readlink -f $sources)
+    workdir=$(readlink -f $workdir)
+
+    [ -d "$workdir" ]
+    [ -d "$sources" ]
+
+    rm -f "$workdir/sm.tgz"
+    source_pack_create "$sources" "$workdir/sm.tgz"
+
+    [ -d "$workdir/smroot" ] || {
+        mkdir "$workdir/smroot"
+        if [ -e "$workdir/smroot.tgz" ]; then
+            chroot_restore "$workdir/smroot.tgz" "$workdir/smroot"
+        else
+            chroot_create "$workdir/smroot"
+            chroot_dump "$workdir/smroot" "$workdir/smroot.tgz"
+        fi
+        chroot_install_sm_prereqs "$workdir/sm.tgz" "$workdir/smroot"
+        chroot_prepare_sm_venv "$workdir/sm.tgz" "$workdir/smroot"
+    }
+    chroot_run_sm_tests "$workdir/sm.tgz" "$workdir/smroot"
+}
+
+
 function chroot_create() {
     local chroot_dir
     chroot_dir="$1"
