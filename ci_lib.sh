@@ -125,7 +125,7 @@ function chroot_restore() {
 }
 
 
-function smroot_run() {
+function chroot_run() {
     local chroot_dir
     chroot_dir="$1"
 
