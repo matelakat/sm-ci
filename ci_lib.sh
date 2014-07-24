@@ -25,22 +25,22 @@ function check() {
     rm -f "$workdir/source.tgz"
     source_pack_create "$sources" "$workdir/source.tgz"
 
-    [ -d "$workdir/smroot" ] || {
-        mkdir "$workdir/smroot"
+    [ -d "$workdir/chroot" ] || {
+        mkdir "$workdir/chroot"
         if [ -e "$workdir/smroot.tgz" ]; then
-            chroot_restore "$workdir/smroot.tgz" "$workdir/smroot"
+            chroot_restore "$workdir/smroot.tgz" "$workdir/chroot"
         else
-            chroot_create "$workdir/smroot"
-            chroot_dump "$workdir/smroot" "$workdir/smroot.tgz"
+            chroot_create "$workdir/chroot"
+            chroot_dump "$workdir/chroot" "$workdir/smroot.tgz"
         fi
 
         for prepare_function in $prepare_functions; do
-            $prepare_function "$workdir/source.tgz" "$workdir/smroot"
+            $prepare_function "$workdir/source.tgz" "$workdir/chroot"
         done
     }
 
     for test_function in $test_functions; do
-       $test_function "$workdir/source.tgz" "$workdir/smroot"
+       $test_function "$workdir/source.tgz" "$workdir/chroot"
     done
 }
 
