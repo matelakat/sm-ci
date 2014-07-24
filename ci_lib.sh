@@ -127,7 +127,7 @@ function source_pack_create() {
 }
 
 
-function smroot_install_prereqs() {
+function chroot_install_sm_prereqs() {
     local sm_tarball
     local chroot_dir
     sm_tarball="$1"
