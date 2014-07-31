@@ -10,7 +10,8 @@ export CPPLAGS="-fprofile-arcs -ftest-coverage -g"
 cd vhd
 make
 cd ../test
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../vhd/lib/.libs nosetests vhd.py
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../vhd/lib/.libs \
+    nosetests --with-xunit --xunit-file=nosetests.xml vhd.py
 cd ../vhd
 gcovr -x -f "/blktap/.*" | sed -e 's,/blktap/,blktap/,g' > /blktap/coverage.xml
 cat $0 | sed '0,/DOXYGEN_CONFIG_START/d' | sed '/DOXYGEN_CONFIG_END/,$d' > Doxyfile
