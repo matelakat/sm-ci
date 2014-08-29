@@ -2,7 +2,7 @@
 UBUNTU_SUITE="${UBUNTU_SUITE:-precise}"
 
 CHROOT_SUBDIR="${UBUNTU_SUITE}-chroot"
-FAKECHROOT_FNAME="fakechroot.save"
+UBUNTU_MIRROR="http://www.mirrorservice.org/sites/archive.ubuntu.com/ubuntu/"
 
 
 function check() {
@@ -51,23 +51,20 @@ function chroot_create() {
 
     chroot_dir="$(readlink -f $chroot_dir)"
 
-    local fakechroot_state
     local chroot_path
 
-    fakechroot_state="$chroot_dir/$FAKECHROOT_FNAME"
     chroot_path="$chroot_dir/$CHROOT_SUBDIR"
 
     [ -d "$chroot_dir" ]
-    [ ! -e "$fakechroot_state" ]
     [ ! -e "$chroot_path" ]
 
-    fakeroot -s "$fakechroot_state" fakechroot debootstrap \
-        --variant=fakechroot \
+    $(fakechroot_call) fakeroot debootstrap \
         --components=main,universe \
         "$UBUNTU_SUITE" \
-        "$chroot_path"
+        "$chroot_path" \
+        "$UBUNTU_MIRROR"
 
-    fakeroot -i "$fakechroot_state" -s "$fakechroot_state" fakechroot chroot \
+    $(fakechroot_call) fakeroot chroot \
         "$chroot_path" bash -c \
             "apt-get update"
 }
@@ -82,19 +79,16 @@ function chroot_dump() {
 
     chroot_dir="$(readlink -f $chroot_dir)"
 
-    local fakechroot_state
     local chroot_path
 
-    fakechroot_state="$chroot_dir/$FAKECHROOT_FNAME"
     chroot_path="$chroot_dir/$CHROOT_SUBDIR"
 
     [ ! -e "$chroot_tarball" ]
-    [ -e "$fakechroot_state" ]
     [ -d "$chroot_path" ]
 
-    fakeroot -i "$fakechroot_state" -s "$fakechroot_state" fakechroot chroot \
+    $(fakechroot_call) fakeroot chroot \
         "$chroot_path" bash -c \
-            "tar -czf - /" > "$chroot_tarball"
+            "tar -czf - --exclude=sys --exclude=proc --exclude=dev/* /" > "$chroot_tarball"
 }
 
 
@@ -107,18 +101,15 @@ function chroot_restore() {
 
     chroot_dir="$(readlink -f $chroot_dir)"
 
-    local fakechroot_state
     local chroot_path
 
-    fakechroot_state="$chroot_dir/$FAKECHROOT_FNAME"
     chroot_path="$chroot_dir/$CHROOT_SUBDIR"
 
     [ -d "$chroot_dir" ]
     [ -e "$chroot_tarball" ]
-    [ ! -e "$fakechroot_state" ]
     [ ! -d "$chroot_path" ]
 
-    fakeroot -s "$fakechroot_state" bash -c \
+    fakeroot bash -c \
         "mkdir $chroot_path \
         && cd $chroot_path \
         && tar -xzf -" < "$chroot_tarball"
@@ -135,20 +126,17 @@ function chroot_run() {
     chroot_dir="$(readlink -f $chroot_dir)"
     script_to_run="$(readlink -f $script_to_run)"
 
-    local fakechroot_state
     local chroot_path
 
-    fakechroot_state="$chroot_dir/$FAKECHROOT_FNAME"
     chroot_path="$chroot_dir/$CHROOT_SUBDIR"
 
     [ -e "$script_to_run" ]
-    [ -e "$fakechroot_state" ]
     [ -d "$chroot_path" ]
 
     rm -f "$chroot_path/the_script.sh"
     cp "$script_to_run" "$chroot_path/the_script.sh"
 
-    fakeroot -i "$fakechroot_state" -s "$fakechroot_state" fakechroot chroot \
+    $(fakechroot_call) fakeroot chroot \
         "$chroot_path" bash /the_script.sh
 }
 
@@ -164,4 +152,9 @@ function source_pack_create() {
     [ ! -e "$source_tarball" ]
 
     tar -czf "$source_tarball" -C "$source_path" ./
+}
+
+
+function fakechroot_call() {
+    echo "fakechroot -e debootstrap"
 }

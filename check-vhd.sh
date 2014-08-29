@@ -68,12 +68,9 @@ function install_vhd_prereqs() {
 
     chroot_dir="$(readlink -f $chroot_dir)"
 
-    local fakechroot_state
     local chroot_path
-    fakechroot_state="$chroot_dir/$FAKECHROOT_FNAME"
     chroot_path="$chroot_dir/$CHROOT_SUBDIR"
 
-    [ -e "$fakechroot_state" ]
     [ -d "$chroot_path" ]
 
     chroot_run "$chroot_dir" "$THISDIR/vhd_prereqs.sh"
@@ -88,13 +85,10 @@ function check_vhd() {
 
     chroot_dir="$(readlink -f $chroot_dir)"
 
-    local fakechroot_state
     local chroot_path
-    fakechroot_state="$chroot_dir/$FAKECHROOT_FNAME"
     chroot_path="$chroot_dir/$CHROOT_SUBDIR"
 
     [ -e "$source_pack" ]
-    [ -e "$fakechroot_state" ]
     [ -d "$chroot_path" ]
 
     cp "$source_pack" "$chroot_path/source.tgz"

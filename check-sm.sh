@@ -68,19 +68,16 @@ function install_sm_prereqs() {
 
     chroot_dir="$(readlink -f $chroot_dir)"
 
-    local fakechroot_state
     local chroot_path
 
-    fakechroot_state="$chroot_dir/$FAKECHROOT_FNAME"
     chroot_path="$chroot_dir/$CHROOT_SUBDIR"
 
     [ -e "$sm_tarball" ]
-    [ -e "$fakechroot_state" ]
     [ -d "$chroot_path" ]
 
     cp "$sm_tarball" "$chroot_path/source.tgz"
 
-    fakeroot -i "$fakechroot_state" -s "$fakechroot_state" fakechroot chroot \
+    $(fakechroot_call) fakeroot chroot \
         "$chroot_path" bash -c \
             "rm -rf /storage-manager \
             && mkdir -p /storage-manager/sm \
@@ -98,18 +95,15 @@ function prepare_sm_venv() {
 
     chroot_dir="$(readlink -f $chroot_dir)"
 
-    local fakechroot_state
     local chroot_path
-    fakechroot_state="$chroot_dir/$FAKECHROOT_FNAME"
     chroot_path="$chroot_dir/$CHROOT_SUBDIR"
 
     [ -e "$sm_tarball" ]
-    [ -e "$fakechroot_state" ]
     [ -d "$chroot_path" ]
 
     cp "$sm_tarball" "$chroot_path/source.tgz"
 
-    fakeroot -i "$fakechroot_state" -s "$fakechroot_state" fakechroot chroot \
+    $(fakechroot_call) fakeroot chroot \
         "$chroot_path" bash -c \
             "rm -rf /storage-manager \
             && mkdir -p /storage-manager/sm \
@@ -127,18 +121,15 @@ function run_sm_tests() {
 
     chroot_dir="$(readlink -f $chroot_dir)"
 
-    local fakechroot_state
     local chroot_path
-    fakechroot_state="$chroot_dir/$FAKECHROOT_FNAME"
     chroot_path="$chroot_dir/$CHROOT_SUBDIR"
 
     [ -e "$sm_tarball" ]
-    [ -e "$fakechroot_state" ]
     [ -d "$chroot_path" ]
 
     cp "$sm_tarball" "$chroot_path/source.tgz"
 
-    fakeroot -i "$fakechroot_state" -s "$fakechroot_state" fakechroot chroot \
+    $(fakechroot_call) fakeroot chroot \
         "$chroot_path" bash -c \
             "cd /storage-manager/sm \
             && rm -rf drivers tests \
