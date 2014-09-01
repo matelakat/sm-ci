@@ -6,4 +6,4 @@ apt-get -qy --no-install-recommends install doxygen
 
 pip install gcovr
 pip install nose
-
+pip install mock

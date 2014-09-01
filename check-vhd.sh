@@ -92,6 +92,7 @@ function check_vhd() {
     [ -d "$chroot_path" ]
 
     cp "$source_pack" "$chroot_path/source.tgz"
+    cp "$THISDIR/fix_gcovr_paths.py" "$chroot_path"
 
     chroot_run "$chroot_dir" "$THISDIR/vhd_check.sh"
 }
