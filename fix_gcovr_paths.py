@@ -37,7 +37,8 @@ class PathFixer(object):
             if file_basename in files:
                 return os.path.join(root, file_basename)
 
-        raise FileNotFoundException("Could not find %s in %s" % (file_basename, base_dir))
+        raise FileNotFoundException(
+            "Could not find %s in %s" % (file_basename, base_dir))
 
     def fix_paths(self, source_dir):
         """Fix paths stored in memory, looking for files located in
@@ -92,12 +93,7 @@ class TestRead(unittest.TestCase):
 
         fixer = PathFixer()
 
-        try:
-            fixer.read_file('non_existing_file.xml')
-        except IOError:
-            pass
-
-        self.assertEquals(None, fixer.content)
+        self.assertRaises(IOError, fixer.read_file, 'non_existing_file.xml')
 
 
 class TestFind(unittest.TestCase):
@@ -140,17 +136,17 @@ class TestFixFilenames(unittest.TestCase):
     @mock.patch('os.walk')
     @mock.patch('os.path.isfile')
     def test_fix_filenames(self, mock_isfile, mock_walk):
-        original_content = (
-            'filename="/foo.c"\n'
-            'filename="/bar.c"\n'
-            'filename="/a/b/c/d/test.c"'
-        )
+        original_content = """
+            filename="/foo.c"
+            filename="/bar.c"
+            filename="/a/b/c/d/test.c"
+        """
 
-        expected_content = (
-            'filename="/dir1/foo.c"\n'
-            'filename="/dir2/bar.c"\n'
-            'filename="/a/b/c/d/test.c"'
-        )
+        expected_content = """
+            filename="/dir1/foo.c"
+            filename="/dir2/bar.c"
+            filename="/a/b/c/d/test.c"
+        """
 
         def fake_isfile(path):
             return path != '/foo.c' and path != '/bar.c'
