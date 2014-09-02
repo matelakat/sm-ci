@@ -45,12 +45,11 @@ class TestFind(unittest.TestCase):
 
         path = None
 
-        try:
-            path = fix_gcovr_paths.PathFixer.find('bar.txt', '/root')
-        except fix_gcovr_paths.FileNotFoundException:
-            pass
-
-        self.assertEquals(None, path)
+        self.assertRaises(
+            fix_gcovr_paths.FileNotFoundException,
+            fix_gcovr_paths.PathFixer.find,
+            'bar.txt',
+            '/root')
 
     @mock.patch('os.walk')
     def test_find_two_files_with_same_name(self, mock_walk):
@@ -115,18 +114,16 @@ class TestFixFilenames(unittest.TestCase):
         fixer = fix_gcovr_paths.PathFixer()
         fixer.content = original_content
 
-        try:
-            fixer.fix_paths('/')
-        except fix_gcovr_paths.FileNotFoundException:
-            pass
-
-        self.assertEquals(original_content, fixer.content)
+        self.assertRaises(
+            fix_gcovr_paths.FileNotFoundException,
+            fixer.fix_paths,
+            '/')
 
 
 class TestWriteFile(unittest.TestCase):
 
     def setUp(self):
-        self.tmp = None
+        self.file_content = None
 
     @mock.patch('__builtin__.file')
     @mock.patch('__builtin__.open')
@@ -134,7 +131,7 @@ class TestWriteFile(unittest.TestCase):
         mock_open.return_value = mock_file
 
         def fake_write(string):
-            self.tmp = string
+            self.file_content = string
 
         mock_file.write.side_effect = fake_write
 
@@ -142,7 +139,7 @@ class TestWriteFile(unittest.TestCase):
         fixer.content = "My file content"
         fixer.write_file('somefile.xml')
 
-        self.assertEquals("My file content", self.tmp)
+        self.assertEquals("My file content", self.file_content)
 
     @mock.patch('__builtin__.open')
     def test_write_file_with_error(self, mock_open):
@@ -154,12 +151,5 @@ class TestWriteFile(unittest.TestCase):
         fixer = fix_gcovr_paths.PathFixer()
         fixer.content = 'Empty'
 
-        try:
-            fixer.write_file('some_file.xml')
-        except IOError:
-            pass
-
-        self.assertEquals(None, self.tmp)
-
-
-
+        self.assertRaises(IOError, fixer.write_file, 'some_file.xml')
+        self.assertEquals(None, self.file_content)
