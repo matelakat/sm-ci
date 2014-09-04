@@ -6,6 +6,7 @@ tar -xzf /source.tgz
 ./autogen.sh
 export CFLAGS="-fprofile-arcs -ftest-coverage -g"
 export CPPLAGS="-fprofile-arcs -ftest-coverage -g"
+export LD_LIBRARY_PATH=$FAKECHROOT_BASE/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 ./configure
 cd vhd
 make
