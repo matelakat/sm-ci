@@ -23,3 +23,22 @@ of the scripts:
 
     check-sm.sh
     check-vhd.sh
+
+## Example
+
+To run the tests on storage manager, given that this directory is checked
+out to `../sm-ci` and you have a directory `../workspace-sm-xs64bit`, you run
+the tests:
+
+    ../sm-ci/check-sm.sh ./ ../workspace-sm-xs64bit/
+
+And transfer the coverage file:
+
+
+```
+
+python ../sm-ci/amend_coverage.py \
+  ../workspace-sm-xs64bit/chroot/precise-chroot/storage-manager/sm/.coverage \
+  /storage-manager/sm/
+
+```
