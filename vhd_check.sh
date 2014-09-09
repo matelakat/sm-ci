@@ -24,7 +24,9 @@ if [ -d "../test" ]; then
     sed -ibak -e 's,/blktap/,blktap/,g' /blktap/coverage.xml
 fi
 
-cat $0 | sed '0,/DOXYGEN_CONFIG_START/d' | sed '/DOXYGEN_CONFIG_END/,$d' > Doxyfile
+cat $0 |
+    sed '0,/DOXYGEN_CONFIG_START/d' |
+    sed '/DOXYGEN_CONFIG_END/,$d' > Doxyfile
 doxygen
 exit 0
 
