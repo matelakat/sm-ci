@@ -3,13 +3,16 @@ rm -rf /blktap
 mkdir /blktap
 cd blktap
 tar -xzf /source.tgz
+tar -xzf /additional_files.tgz
 ./autogen.sh
 export CFLAGS="-fprofile-arcs -ftest-coverage -g"
 export CPPLAGS="-fprofile-arcs -ftest-coverage -g"
 export LD_LIBRARY_PATH=$FAKECHROOT_BASE/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 ./configure
-cd vhd
+cp gntdev.h /usr/include/xen/gntdev.h
+cp /usr/include/xs.h /usr/include/xenstore.h
 make
+cd vhd
 cd ../test
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../vhd/lib/.libs \
     nosetests --with-xunit --xunit-file=nosetests.xml vhd.py
