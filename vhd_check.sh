@@ -13,13 +13,17 @@ cp gntdev.h /usr/include/xen/gntdev.h
 cp /usr/include/xs.h /usr/include/xenstore.h
 make
 cd vhd
-cd ../test
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../vhd/lib/.libs \
-    nosetests --with-xunit --xunit-file=nosetests.xml vhd.py
-cd ../vhd
-gcovr -x -f "/blktap/.*" > /blktap/coverage_unfixed.xml
-/fix_gcovr_paths.py /blktap/{vhd,coverage_unfixed.xml,coverage.xml}
-sed -ibak -e 's,/blktap/,blktap/,g' /blktap/coverage.xml
+
+if [ -d "../test" ]; then
+    cd ../test
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../vhd/lib/.libs \
+        nosetests --with-xunit --xunit-file=nosetests.xml vhd.py
+    cd ../vhd
+    gcovr -x -f "/blktap/.*" > /blktap/coverage_unfixed.xml
+    /fix_gcovr_paths.py /blktap/{vhd,coverage_unfixed.xml,coverage.xml}
+    sed -ibak -e 's,/blktap/,blktap/,g' /blktap/coverage.xml
+fi
+
 cat $0 | sed '0,/DOXYGEN_CONFIG_START/d' | sed '/DOXYGEN_CONFIG_END/,$d' > Doxyfile
 doxygen
 exit 0
