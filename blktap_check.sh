@@ -2,48 +2,71 @@ set -eux
 
 export HOME=/root
 
+ONLY_UNITTESTS=${ONLY_UNITTESTS:-}
+
+BLKTAP_DO_BUILD="yes"
+BLKTAP_DO_DOXYGEN="yes"
+BLKTAP_DO_UNITTESTS="yes"
+BLKTAP_DO_VHD_INTEGRATION_TESTS="yes"
+
+if [ -n "$ONLY_UNITTESTS" ]; then
+    BLKTAP_DO_BUILD=""
+    BLKTAP_DO_DOXYGEN=""
+    BLKTAP_DO_UNITTESTS="yes"
+    BLKTAP_DO_VHD_INTEGRATION_TESTS=""
+fi
+
 # Unpack additional files
 rm -rf /additional_files
 mkdir -p /additional_files
 cd /additional_files
 tar -xzf /additional_files.tgz
 
-rm -rf /blktap
-mkdir /blktap
-cd /blktap
-tar -xzf /source.tgz
-./autogen.sh
-export CFLAGS="-fprofile-arcs -ftest-coverage -g"
-export CPPLAGS="-fprofile-arcs -ftest-coverage -g"
-export LD_LIBRARY_PATH=$FAKECHROOT_BASE/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
-./configure
-cp /additional_files/gntdev.h /usr/include/xen/gntdev.h
-cp /usr/include/xs.h /usr/include/xenstore.h
-make
-cd vhd
-
-if [ -d "../test" ]; then
-    cd ../test
-    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../vhd/lib/.libs \
-        nosetests --with-xunit --xunit-file=nosetests.xml vhd.py
-    cd ../vhd
-    gcovr -x -f "/blktap/.*" > /blktap/coverage_unfixed.xml
-    /additional_files/fix_gcovr_paths.py /blktap/{vhd,coverage_unfixed.xml,coverage.xml}
-    sed -ibak -e 's,/blktap/,blktap/,g' /blktap/coverage.xml
+if [ -n "$BLKTAP_DO_BUILD" ]; then
+    rm -rf /blktap
+    mkdir /blktap
+    cd /blktap
+    tar -xzf /source.tgz
+    ./autogen.sh
+    export CFLAGS="-fprofile-arcs -ftest-coverage -g"
+    export CPPLAGS="-fprofile-arcs -ftest-coverage -g"
+    export LD_LIBRARY_PATH=$FAKECHROOT_BASE/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+    ./configure
+    cp /additional_files/gntdev.h /usr/include/xen/gntdev.h
+    cp /usr/include/xs.h /usr/include/xenstore.h
+    make
 fi
 
-cat $0 |
-    sed '0,/DOXYGEN_CONFIG_START/d' |
-    sed '/DOXYGEN_CONFIG_END/,$d' > Doxyfile
-doxygen
+if [ -n "$BLKTAP_DO_VHD_INTEGRATION_TESTS" ]; then
+    cd /blktap/vhd
+
+    if [ -d "../test" ]; then
+        cd ../test
+        LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../vhd/lib/.libs \
+            nosetests --with-xunit --xunit-file=nosetests.xml vhd.py
+        cd ../vhd
+        gcovr -x -f "/blktap/.*" > /blktap/coverage_unfixed.xml
+        /additional_files/fix_gcovr_paths.py /blktap/{vhd,coverage_unfixed.xml,coverage.xml}
+        sed -ibak -e 's,/blktap/,blktap/,g' /blktap/coverage.xml
+    fi
+fi
+
+if [ -n "$BLKTAP_DO_DOXYGEN" ]; then
+    cd /blktap/vhd
+    cat $0 |
+        sed '0,/DOXYGEN_CONFIG_START/d' |
+        sed '/DOXYGEN_CONFIG_END/,$d' > Doxyfile
+    doxygen
+fi
 
 
-# Unit tests (using ceedling)
-
-# Unpack tests and source
-tar -xzf /source.tgz -C /additional_files/ceedling-project/src
-cd /additional_files/ceedling-project
-rake test:all
+if [ -n "$BLKTAP_DO_UNITTESTS" ]; then
+    # Unit tests (using ceedling)
+    # Unpack tests and source
+    tar -xzf /source.tgz -C /additional_files/ceedling-project/src
+    cd /additional_files/ceedling-project
+    rake test:all
+fi
 
 exit 0
 
