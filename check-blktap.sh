@@ -92,7 +92,6 @@ function check_blktap() {
     [ -d "$chroot_path" ]
 
     cp "$source_pack" "$chroot_path/source.tgz"
-    cp "$THISDIR/fix_gcovr_paths.py" "$chroot_path"
     tar -czf "$chroot_path/additional_files.tgz" -C "$THISDIR/blktap" ./
 
     chroot_run "$chroot_dir" "$THISDIR/blktap_check.sh"

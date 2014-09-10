@@ -20,7 +20,7 @@ if [ -d "../test" ]; then
         nosetests --with-xunit --xunit-file=nosetests.xml vhd.py
     cd ../vhd
     gcovr -x -f "/blktap/.*" > /blktap/coverage_unfixed.xml
-    /fix_gcovr_paths.py /blktap/{vhd,coverage_unfixed.xml,coverage.xml}
+    /blktap/fix_gcovr_paths.py /blktap/{vhd,coverage_unfixed.xml,coverage.xml}
     sed -ibak -e 's,/blktap/,blktap/,g' /blktap/coverage.xml
 fi
 
