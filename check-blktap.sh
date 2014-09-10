@@ -5,7 +5,7 @@ function usage() {
     cat >&2 << EOF
 $0
 
-Check the vhd component within blktap repository
+Check the blktap repository
 
 Usage:
     $0 SOURCES WORKSPACE
@@ -60,7 +60,7 @@ THISDIR=$(dirname $THISFILE)
 . "$THISDIR/ci_lib.sh"
 
 
-function install_vhd_prereqs() {
+function install_blktap_prereqs() {
     local source_pack
     local chroot_dir
     source_pack="$1"
@@ -73,11 +73,11 @@ function install_vhd_prereqs() {
 
     [ -d "$chroot_path" ]
 
-    chroot_run "$chroot_dir" "$THISDIR/vhd_prereqs.sh"
+    chroot_run "$chroot_dir" "$THISDIR/blktap_prereqs.sh"
 }
 
 
-function check_vhd() {
+function check_blktap() {
     local source_pack
     local chroot_dir
     source_pack="$1"
@@ -95,10 +95,10 @@ function check_vhd() {
     cp "$THISDIR/fix_gcovr_paths.py" "$chroot_path"
     tar -czf "$chroot_path/additional_files.tgz" -C "$THISDIR/blktap" ./
 
-    chroot_run "$chroot_dir" "$THISDIR/vhd_check.sh"
+    chroot_run "$chroot_dir" "$THISDIR/blktap_check.sh"
 }
 
 
 check "$SOURCES" "$WORKDIR" \
-    "install_vhd_prereqs" \
-    "check_vhd"
+    "install_blktap_prereqs" \
+    "check_blktap"
