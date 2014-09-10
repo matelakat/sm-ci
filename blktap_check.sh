@@ -1,15 +1,21 @@
 set -eux
+
+# Unpack additional files
+rm -rf /additional_files
+mkdir -p /additional_files
+cd /additional_files
+tar -xzf /additional_files.tgz
+
 rm -rf /blktap
 mkdir /blktap
-cd blktap
+cd /blktap
 tar -xzf /source.tgz
-tar -xzf /additional_files.tgz
 ./autogen.sh
 export CFLAGS="-fprofile-arcs -ftest-coverage -g"
 export CPPLAGS="-fprofile-arcs -ftest-coverage -g"
 export LD_LIBRARY_PATH=$FAKECHROOT_BASE/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 ./configure
-cp gntdev.h /usr/include/xen/gntdev.h
+cp /additional_files/gntdev.h /usr/include/xen/gntdev.h
 cp /usr/include/xs.h /usr/include/xenstore.h
 make
 cd vhd
@@ -20,7 +26,7 @@ if [ -d "../test" ]; then
         nosetests --with-xunit --xunit-file=nosetests.xml vhd.py
     cd ../vhd
     gcovr -x -f "/blktap/.*" > /blktap/coverage_unfixed.xml
-    /blktap/fix_gcovr_paths.py /blktap/{vhd,coverage_unfixed.xml,coverage.xml}
+    /additional_files/fix_gcovr_paths.py /blktap/{vhd,coverage_unfixed.xml,coverage.xml}
     sed -ibak -e 's,/blktap/,blktap/,g' /blktap/coverage.xml
 fi
 
