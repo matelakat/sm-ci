@@ -1,5 +1,7 @@
 set -eux
 
+export HOME=/root
+
 # Unpack additional files
 rm -rf /additional_files
 mkdir -p /additional_files
@@ -34,6 +36,15 @@ cat $0 |
     sed '0,/DOXYGEN_CONFIG_START/d' |
     sed '/DOXYGEN_CONFIG_END/,$d' > Doxyfile
 doxygen
+
+
+# Unit tests (using ceedling)
+
+# Unpack tests and source
+tar -xzf /source.tgz -C /additional_files/ceedling-project/src
+cd /additional_files/ceedling-project
+rake test:all
+
 exit 0
 
 
