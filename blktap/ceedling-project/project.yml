@@ -56,6 +56,8 @@
     uint32:   UINT32
     int8:     INT8
     bool:     UINT8
+  :attributes:
+    - INLINE
 
 #:tools:
 # Ceedling defaults to using gcc for compiling, linking, etc.

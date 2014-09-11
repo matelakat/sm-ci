@@ -62,10 +62,17 @@ fi
 
 if [ -n "$BLKTAP_DO_UNITTESTS" ]; then
     # Unit tests (using ceedling)
-    # Unpack tests and source
+    # Unpack source
     tar -xzf /source.tgz -C /additional_files/ceedling-project/src
-    cd /additional_files/ceedling-project
-    rake test:all
+
+    if [ -d "/additional_files/ceedling-project/src/tests" ]; then
+        # Move tests to ceedling-project
+        mv /additional_files/ceedling-project/src/tests/* /additional_files/ceedling-project/test/
+
+        # Run tests
+        cd /additional_files/ceedling-project
+        rake test:all
+    fi
 fi
 
 exit 0
