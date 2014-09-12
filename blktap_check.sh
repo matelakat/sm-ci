@@ -74,7 +74,7 @@ if [ -n "$BLKTAP_DO_UNITTESTS" ]; then
         rake gcov:all
         gcovr -x -r $(pwd) -f $(pwd)/src -f $(pwd)/test > coverage_unfixed.xml
         /additional_files/fix_gcovr_paths.py /additional_files/ceedling-project/{src,coverage_unfixed.xml,coverage.xml}
-        sed -ibak -e 's,src/,,g' -e 's,test/,tests/,g' coverage.xml
+        sed -ibak -e 's,src/,blktap/,g' -e 's,test/,blktap/tests/,g' coverage.xml
     fi
 fi
 
