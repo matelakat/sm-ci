@@ -68,10 +68,16 @@
   :arguments:
     - -lxenctrl
 
+:tools_gcov_linker:
+  :arguments:
+    - -lxenctrl
+
 :plugins:
   :load_paths:
     - vendor/ceedling/plugins
   :enabled:
     - stdout_pretty_tests_report
     - module_generator
+    - gcov
+    - xml_tests_report
 ...

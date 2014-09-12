@@ -67,11 +67,14 @@ if [ -n "$BLKTAP_DO_UNITTESTS" ]; then
 
     if [ -d "/additional_files/ceedling-project/src/tests" ]; then
         # Move tests to ceedling-project
-        mv /additional_files/ceedling-project/src/tests/* /additional_files/ceedling-project/test/
+        cp /additional_files/ceedling-project/src/tests/* /additional_files/ceedling-project/test/
 
-        # Run tests
+        # Run tests with coverage
         cd /additional_files/ceedling-project
-        rake test:all
+        rake gcov:all
+        gcovr -x -r $(pwd) -f $(pwd)/src -f $(pwd)/test > coverage_unfixed.xml
+        /additional_files/fix_gcovr_paths.py /additional_files/ceedling-project/{src,coverage_unfixed.xml,coverage.xml}
+        sed -ibak -e 's,src/,,g' -e 's,test/,tests/,g' coverage.xml
     fi
 fi
 
