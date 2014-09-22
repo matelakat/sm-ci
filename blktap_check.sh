@@ -54,7 +54,7 @@ fi
 if [ -n "$BLKTAP_DO_DOXYGEN" ]; then
     cd /blktap/vhd
     cat $0 |
-        sed '0,/DOXYGEN_CONFIG_START/d' |
+        sed '0,/^DOXYGEN_CONFIG_START/d' |
         sed '/DOXYGEN_CONFIG_END/,$d' > Doxyfile
     doxygen
 fi
