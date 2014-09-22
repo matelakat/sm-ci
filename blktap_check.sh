@@ -52,7 +52,7 @@ if [ -n "$BLKTAP_DO_VHD_INTEGRATION_TESTS" ]; then
 fi
 
 if [ -n "$BLKTAP_DO_DOXYGEN" ]; then
-    cd /blktap/vhd
+    cd /blktap
     cat $0 |
         sed '0,/^DOXYGEN_CONFIG_START/d' |
         sed '/DOXYGEN_CONFIG_END/,$d' > Doxyfile
@@ -110,7 +110,7 @@ DOXYFILE_ENCODING      = UTF-8
 # identify the project. Note that if you do not use Doxywizard you need
 # to put quotes around the project name if it contains spaces.
 
-PROJECT_NAME           = "blktap/vhd"
+PROJECT_NAME           = "blktap"
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number.
 # This could be handy for archiving the generated documentation or
