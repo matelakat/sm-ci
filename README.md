@@ -1,44 +1,49 @@
 # Scripts for testing
 
-To be able to test code without being scared about the side effects,
-a fakechroot environment is created. This environment is called `chroot`.
+## Test xapi-project/sm
 
-To transfer the source code to the `chroot` the source code is packaged as
-a `.tgz` to a so-called `source_pack` and extracted inside the `chroot`.
+Given you have cloned this repository to a directory `storage-ci`, Clone the
+sources:
 
- - A `chroot` could be created.
- - A `chroot` could be dumped to a `.tgz` file.
- - A `chroot` could be restored from a `.tgz` file.
- - A tarball file, `source_pack` could be created from the sources.
- - A `source_pack` could be used to install the prerequisites to an `chroot`.
- - A `source_pack` could be used to create the python test environment within
-   `chroot`.
- - Unit tests could be ran in an `chroot` that has all the prerequisites
-   installed and the python test environment created.
+    git clone https://github.com/xapi-project/sm --branch=xs64bit
 
-## Public interface
+Create a workspace to store the temporary files (only required at the first
+run):
 
-There is no public interface for the library. The public interface consists
-of the scripts:
+    mkdir workspace-sm
 
-    check-sm.sh
-    check-blktap.sh
+Run all the tests:
 
-## Example
+    storage-ci/check-sm.sh sm workspace-sm
 
-To run the tests on storage manager, given that this directory is checked
-out to `../sm-ci` and you have a directory `../workspace-sm-xs64bit`, you run
-the tests:
+### Transfer the coverage file
 
-    ../sm-ci/check-sm.sh ./ ../workspace-sm-xs64bit/
+After running the tests, you might want to have a `.coverage` file next to
+your sources, so your editor can display it for you. Because the script runs
+the tests in a separate chroot environment, the produced file needs to be
+amended. You can do this with the following command, given your current
+working directory is the working copy of the `sm` project:
 
-And transfer the coverage file:
+    python ../storage-ci/amend_coverage.py \
+      ../workspace-sm/chroot/precise-chroot/storage-manager/sm/.coverage \
+      /storage-manager/sm/
 
+## Test xapi-project/blktap
 
-```
+Given you have cloned this repository to a directory `storage-ci`, Clone the
+sources:
 
-python ../sm-ci/amend_coverage.py \
-  ../workspace-sm-xs64bit/chroot/precise-chroot/storage-manager/sm/.coverage \
-  /storage-manager/sm/
+    git clone https://github.com/xapi-project/blktap --branch=xs64bit
 
-```
+Create a workspace to store the temporary files (only required at the first
+run):
+
+    mkdir workspace-blktap
+
+To build blktap, run the unittests and generate documentation:
+
+    storage-ci/check-blktap.sh blktap/ workspace-blktap/
+
+Should you wish to run only the unttests:
+
+    ONLY_UNITTESTS=yes storage-ci/check-blktap.sh blktap/ workspace-blktap/
