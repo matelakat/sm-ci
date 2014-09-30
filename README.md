@@ -3,7 +3,12 @@
 ## Requirements
 
 At the moment these scripts were only tested on Ubuntu precise and Ubuntu
-trusty.
+trusty. On Debian wheezy, you'll need to prefix `check-*` commands with:
+
+    PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
+
+as those paths are not searched for a regular user.
+
 
 ## Test xapi-project/sm
 
