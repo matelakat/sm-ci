@@ -1,5 +1,10 @@
 # Scripts for testing
 
+## Requirements
+
+At the moment these scripts were only tested on Ubuntu precise and Ubuntu
+trusty.
+
 ## Test xapi-project/sm
 
 Given you have cloned this repository to a directory `storage-ci`, Clone the
