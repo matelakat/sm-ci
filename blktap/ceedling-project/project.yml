@@ -39,9 +39,11 @@
   :test:
     - *common_defines
     - TEST
+    - _GNU_SOURCE
   :test_preprocess:
     - *common_defines
     - TEST
+    - _GNU_SOURCE
 
 :cmock:
   :mock_prefix: mock_
