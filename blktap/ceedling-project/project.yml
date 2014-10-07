@@ -67,10 +67,12 @@
 :tools_test_linker:
   :arguments:
     - -lxenctrl
+    - -luuid
 
 :tools_gcov_linker:
   :arguments:
     - -lxenctrl
+    - -luuid
 
 :plugins:
   :load_paths:
