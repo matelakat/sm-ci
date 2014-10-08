@@ -57,3 +57,10 @@ To build blktap, run the unittests and generate documentation:
 Should you wish to run only the unttests:
 
     ONLY_UNITTESTS=yes storage-ci/check-blktap.sh blktap/ workspace-blktap/
+
+To debug a test file `tests/test_td-ctx.c`, do the following:
+
+    storage-ci/debug-blktap.sh workspace-blktap/ test_td-ctx
+
+It will drop you to an interactive gdb session.
+
