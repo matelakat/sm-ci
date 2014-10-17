@@ -39,6 +39,8 @@ THISDIR=$(dirname $THISFILE)
 
 . "$THISDIR/ci_lib.sh"
 
+set_path
+
 # check dependencies
 assert_installed fakeroot
 assert_installed fakechroot

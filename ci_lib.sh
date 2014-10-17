@@ -171,3 +171,8 @@ $1 was not found, please install it to your system.
 EOF
     exit 1
 }
+
+
+function set_path() {
+    export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
+}
