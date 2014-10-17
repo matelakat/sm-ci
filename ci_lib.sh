@@ -158,3 +158,16 @@ function source_pack_create() {
 function fakechroot_call() {
     echo "fakechroot -e debootstrap"
 }
+
+
+function assert_installed() {
+    if which $1; then
+        return
+    fi
+    cat >&2 << EOF
+Error:
+
+$1 was not found, please install it to your system.
+EOF
+    exit 1
+}

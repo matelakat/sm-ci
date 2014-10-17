@@ -29,18 +29,6 @@ EOF
 }
 
 
-function assert_installed() {
-    if which $1; then
-        return
-    fi
-    cat >&2 << EOF
-Error:
-
-$1 was not found, please install it to your system.
-EOF
-    exit 1
-}
-
 [ -z "$1" ] && usage
 [ -z "$2" ] && usage
 
@@ -49,15 +37,15 @@ set -eux
 PATH_TO_SM="$1"
 WORKDIR="$2"
 
-# check dependencies
-assert_installed fakeroot
-assert_installed fakechroot
-assert_installed debootstrap
-
 THISFILE=$(readlink -f $0)
 THISDIR=$(dirname $THISFILE)
 
 . "$THISDIR/ci_lib.sh"
+
+# check dependencies
+assert_installed fakeroot
+assert_installed fakechroot
+assert_installed debootstrap
 
 
 function install_sm_prereqs() {
