@@ -1,0 +1,22 @@
+# Install docker
+# See https://docs.docker.com/installation/
+# On Ubuntu trusty:
+sudo apt-get install docker.io
+
+# Create workspace
+mkdir docker/
+cd docker/
+
+# Retrieve repositories
+git clone git@github.com:fquesnel/storage-ci.git
+git clone git@github.com:xapi-project/blktap.git
+
+# Prepare the build
+cd storage-ci
+git checkout docker
+cd ..
+cp storage-ci/Dockerfile.blktap Dockerfile
+
+# Build and run unit tests
+# Use the same command to run unit tests once the environment is built
+sudo docker build .

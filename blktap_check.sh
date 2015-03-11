@@ -17,24 +17,26 @@ if [ -n "$ONLY_UNITTESTS" ]; then
 fi
 
 # Unpack additional files
-rm -rf /additional_files
-mkdir -p /additional_files
+#rm -rf /additional_files
+#mkdir -p /additional_files
 cd /additional_files
-tar -xzf /additional_files.tgz
+#tar -xzf /additional_files.tgz
 
-export LD_LIBRARY_PATH=$FAKECHROOT_BASE/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+cp /additional_files/gntdev.h /usr/include/xen/gntdev.h
 
 if [ -n "$BLKTAP_DO_BUILD" ]; then
-    rm -rf /blktap
-    mkdir /blktap
+    #rm -rf /blktap
+    #mkdir /blktap
     cd /blktap
-    tar -xzf /source.tgz
+    #tar -xzf /source.tgz
     ./autogen.sh
     export CFLAGS="-fprofile-arcs -ftest-coverage -g"
     export CPPLAGS="-fprofile-arcs -ftest-coverage -g"
     ./configure
-    cp /additional_files/gntdev.h /usr/include/xen/gntdev.h
+
+    # For precise only (it breaks the build with trusty)
     cp /usr/include/xs.h /usr/include/xenstore.h
+
     make
 fi
 
@@ -64,7 +66,7 @@ fi
 if [ -n "$BLKTAP_DO_UNITTESTS" ]; then
     # Unit tests (using ceedling)
     # Unpack source
-    tar -xzf /source.tgz -C /additional_files/ceedling-project/src
+    #tar -xzf /source.tgz -C /additional_files/ceedling-project/src
 
     if [ -d "/additional_files/ceedling-project/src/tests" ]; then
         # Move tests to ceedling-project
@@ -74,7 +76,7 @@ if [ -n "$BLKTAP_DO_UNITTESTS" ]; then
         cd /additional_files/ceedling-project
         rake gcov:all
         gcovr -x -r $(pwd) -f $(pwd)/src -f $(pwd)/test > coverage_unfixed.xml
-        /additional_files/fix_gcovr_paths.py /additional_files/ceedling-project/{src,coverage_unfixed.xml,coverage.xml}
+        /additional_files/fix_gcovr_paths.py src coverage_unfixed.xml coverage.xml
         sed -ibak -e 's,src/,blktap/,g' -e 's,test/,blktap/tests/,g' coverage.xml
     fi
 fi
